@@ -1,0 +1,97 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1561\cocoasubrtf400
+{\fonttbl\f0\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red255\green83\blue8;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\csgenericrgb\c100000\c32549\c3137;\csgenericrgb\c0\c0\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww14580\viewh11400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 This library is designed to simulate and train hierarchical Linear Nonlinear models.\
+It includes functions to simulate, initialise and train these models as well as other functions, necessary for simulating a hGLM model or to evaluate its derivative wrt. its parameters.\
+\
+There must be a single folder, implementing all the different versions of the same model, that is able to handle the following functionalities:\
+\
+- unconstrained synapses\
+- presence or absence of the regularisation term\
+- fitting subthreshold or spikes\
+- after-spike currents\
+- single or double kernel synapses\
+- alpha or double exponential synapses\
+\
+Constrains:\
+- inhibitory and excitatory synapses separated - the user can decide the polarity of each synapse, and provide them separately\
+- the optimization for the synaptic weights can be constrained to be positive or negative, but can also be learned from data when such constrain is not provided \
+\
+##################################\
+Tools: fitting and evaluating hGLM models\
+\
+I. HIGH LEVEL FUNCTIONS - use these functions most of the time!\
+\
+sim_hGLM_sub.R: simulate the subthreshold response of a hGLM model to synaptic inputs\
+\
+sim_hGLM_sp.R: simulate the spiking response of a hGLM model to synaptic inputs\
+\
+init_hGLM.R: initialize the hGLM model. Either randomly, or to match the response of a 1-layer model\
+\
+\cf2 \
+\cf3 Train_hGLM.R: wrapper for fitting the subthreshold part of an hGLM models. \
+	for a given model structure, it \
+	(0.) optional: generates training and test data (if not provided)\
+	1. initialise parameters randomly, but to reasonable values, if initial values are not provided\
+	2. performs parameter optimization for subthreshold response\
+	3. evaluate the model sub-threshold prediction on test data - if test data is available\
+	4. fits the spiking model\
+	5. evaluate the spike reliability of the fit\
+\cf0 \
+Tests: \
+	- UnitTests_Init.R: testing the initialization\
+	- SimSubSupra.R: an example for simulating a hGLM\
+	- UnitTests_Err.R: testing the calculation of the graidents (numericaally) as well as the internal functions of the library\
+\
+##################################\
+II. Interfaces required for training the subthreshold models.\
+\
+grad_hGLM.R: calculates the gradient of an LN model's response wrt its parameters\
+\cf2 \
+\cf0 err_hGLM.R: \
+	R's builtin optimisation functions require a parameter vector, but its is more convenient to parameterise hGLMs using lists.\
+	\
+	has 4 functions - wrappers for optimization of parameters\
+	- err.hGLM: uses sim.hLN() to calculate the error of a hLN model\
+	- grad.err.hGLM: uses grad.hLN() to calculate the gradients of the error of a hLN model\
+	- test.args: test that the parameters and the arguments of the above functions are formally correct\
+	- make.args.parvec: tests and prepares the arguments for err and grad.err.\
+\
+\
+##################################\
+Utils: LOW LEVEL FUNCTIONS\
+\
+	- AlphaFilt.R: implements an alpha synapse, and filters incoming spikes with alpha kernel. The amplitude of the function is 1/tau, while its integral is constant 1\
+\
+	- AlphaFiltAmpl.R: implements an alpha synapse, and filters incoming spikes with alpha kernel. The amplitude of the function is constant, 1/e, while its integral is tau\
+\
+\cf3 	- Estimate_threshold.R: optimization routines for spike estimation\
+\cf0 \
+	- Extract.spiketimes.R: detect spikes in a Vm trace\
+\
+	- IntSpikes.R: This function intagrates the synaptic input arriving to a given subunit\
+\
+\cf2 	- merge_inputs.R: functions to transform inputs to match the new models\
+\cf0 \
+	- Sigm.R: A logistic sigmoid function and its derivatives, and inverse\
+\
+	- Spike_Basis.R: functions to ganerate and initialise basis functions for spikes\
+\cf2 \
+\cf3 	- SpikeReliability.R: calculates the reliability of spike timing from input reference data and optimised data. Inner product to quantify spike reliability\
+\cf2 \
+\cf0 ##################################\
+Data: data files used during fitting\
+\
+\cf2 \
+##################################\
+Graphics: Some functions that might be useful to plot the results of model-fitting\
+\
+Graph_hLN...R: plots the parameters and the architecture of the hLN model\
+\
+\
+\
+}
