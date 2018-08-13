@@ -8,6 +8,9 @@ Folders:
 	Graphics: functions to plot the model structure for hGLMs, inut and output data (not yet implemented)
 	Data: demo data from biophysical models - see the Ujfalussy et al., 2017 Fig. 2. for description of the biophysical model and the stimulation protocol
 
+	Neuron: python and neuron files used to simulate the biophysical model
+	Inputs: R scripts used to generate inputs to the biophysical model
+
 ##################################
 ## usage: 
 examples are given in the valid_hGLN.R
